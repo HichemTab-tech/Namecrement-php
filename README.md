@@ -40,10 +40,10 @@ composer require hichemtab-tech/namecrement-php
 ```php
 <?php
 
-use function App\namecrement; // adjust if your namespace is different
+use HichemTabTech\Namecrement\Namecrement;
 
 $existing = ['file', 'file (1)', 'file (2)'];
-$newName = namecrement('file', $existing);
+$newName = Namecrement::namecrement('file', $existing);
 
 echo $newName; 
 // Outputs: "file (3)"
