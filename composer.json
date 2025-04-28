@@ -1,0 +1,30 @@
+{
+    "name": "hichemtab-tech/namecrement",
+    "description": "A smart php utility that generates unique incremental names, preventing naming collisions by automatically appending incremental suffixes.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "HichemTabTech\\Namecrement\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hichem Taboukouyout",
+            "email": "hichem.tab2002@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "pestphp/pest": "^3.8"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
