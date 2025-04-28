@@ -7,8 +7,11 @@ Automatically generates a unique name by incrementing it if needed — just like
 
 <!--suppress HtmlDeprecatedAttribute -->
 <p align="center">
-  <img src="https://img.shields.io/github/actions/workflow/status/HichemTab-tech/namecrement-php/tests.yml?branch=master"  alt="badge test"/>
-  <img src="https://img.shields.io/github/license/Configure image/namecrement-php"  alt="badge test" />
+
+![Tests](https://github.com/HichemTab-tech/Namecrement-php/workflows/Tests/badge.svg)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/HichemTab-tech/Namecrement-php/blob/master/LICENSE)
+![Packagist Version](https://img.shields.io/packagist/v/hichemtab-tech/namecrement)
+
 </p>
 
 ---
