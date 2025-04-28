@@ -25,6 +25,10 @@ Automatically generates a unique name by incrementing it if needed — just like
 
 ---
 
+### 📦 Also Available
+
+> Looking for a JavaScript version? Check out [Namecrement for JavaScript](https://github.com/HichemTab-tech/Namecrement)!
+
 ## 📦 Installation
 
 ```bash
