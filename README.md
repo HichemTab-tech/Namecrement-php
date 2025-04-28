@@ -1,10 +1,5 @@
 # Namecrement (PHP)
 
-**Smart unique name generator for PHP**  
-Automatically generates a unique name by incrementing it if needed — just like `"file" → "file (1)" → "file (2)"` and so on.
-
----
-
 <!--suppress HtmlDeprecatedAttribute -->
 <p align="center">
 
@@ -13,6 +8,9 @@ Automatically generates a unique name by incrementing it if needed — just like
 ![Packagist Version](https://img.shields.io/packagist/v/hichemtab-tech/namecrement)
 
 </p>
+
+**Smart unique name generator for PHP**  
+Automatically generates a unique name by incrementing it if needed — just like `"file" → "file (1)" → "file (2)"` and so on.
 
 ---
 
