@@ -2,32 +2,93 @@
 
 use HichemTabTech\Namecrement\Namecrement;
 
-it('generates a unique name when none exist', function () {
-    expect(Namecrement::namecrement('file', []))
-        ->toBe('file');
+describe('Namecrement - Default format', function () {
+    it('returns base name if not taken', function () {
+        expect(Namecrement::namecrement('file', ['file (1)', 'file (2)']))
+            ->toBe('file');
+    });
+
+    it('appends (1) if base name exists', function () {
+        expect(Namecrement::namecrement('file', ['file']))
+            ->toBe('file (1)');
+    });
+
+    it('fills first missing index', function () {
+        expect(Namecrement::namecrement('file', ['file', 'file (1)', 'file (3)']))
+            ->toBe('file (2)');
+    });
+
+    it('skips to next available number', function () {
+        expect(Namecrement::namecrement('file', ['file', 'file (1)', 'file (2)', 'file (3)']))
+            ->toBe('file (4)');
+    });
+
+    it('handles large gaps', function () {
+        expect(Namecrement::namecrement('file', ['file', 'file (5)', 'file (10)']))
+            ->toBe('file (1)');
+    });
+
+    it('ignores partially matching names', function () {
+        expect(Namecrement::namecrement('file', ['file', 'filex', 'file (1)', 'filex (1)']))
+            ->toBe('file (2)');
+    });
+
+    it('handles multi-digit suffixes correctly', function () {
+        expect(Namecrement::namecrement('file', ['file', 'file (1)', 'file (10)']))
+            ->toBe('file (2)');
+    });
+
+    it('handles names ending with numbers', function () {
+        expect(Namecrement::namecrement('file1', ['file1', 'file1 (1)']))
+            ->toBe('file1 (2)');
+    });
+
+    it('handles special characters in names', function () {
+        expect(Namecrement::namecrement('file[1].$^', ['file[1].$^', 'file[1].$^ (1)']))
+            ->toBe('file[1].$^ (2)');
+    });
+
+    it('handles base with suffix-like pattern in the middle', function () {
+        expect(Namecrement::namecrement('file (1) backup', ['file (1) backup', 'file (1) backup (1)']))
+            ->toBe('file (1) backup (2)');
+    });
 });
 
-it('generates an incremented name when base name exists', function () {
-    expect(Namecrement::namecrement('file', ['file']))
-        ->toBe('file (1)');
+describe('Namecrement - Custom suffix format', function () {
+    it('supports custom dash format', function () {
+        expect(Namecrement::namecrement('file', ['file', 'file -1-', 'file -2-'], ' -%N%-'))
+            ->toBe('file -3-');
+    });
+
+    it('supports suffix with no spacing', function () {
+        expect(Namecrement::namecrement('log', ['log', 'log1'], '%N%'))
+            ->toBe('log2');
+    });
+
+    it('supports suffix with prefix and underscore', function () {
+        expect(Namecrement::namecrement('image', ['image', 'image_v1'], '_v%N%'))
+            ->toBe('image_v2');
+    });
+
+    it('handles complex suffix with angle brackets', function () {
+        expect(Namecrement::namecrement('v', ['v', 'v<1>', 'v<2>'], '<%N%>'))
+            ->toBe('v<3>');
+    });
+
+    it('respects spacing inside custom formats', function () {
+        expect(Namecrement::namecrement('item', ['item', 'item (1)', 'item (2)'], ' \%N%\\'))
+            ->toBe('item \1\\');
+    });
+
+    it('returns base if not taken, even with custom format', function () {
+        expect(Namecrement::namecrement('note', ['note -1-'], ' -%N%-'))
+            ->toBe('note');
+    });
 });
 
-it('fills the first missing index', function () {
-    expect(Namecrement::namecrement('file', ['file', 'file (1)', 'file (3)']))
-        ->toBe('file (2)');
-});
-
-it('skips to next available number if all are taken', function () {
-    expect(Namecrement::namecrement('file', ['file', 'file (1)', 'file (2)', 'file (3)']))
-        ->toBe('file (4)');
-});
-
-it('works correctly when there are large gaps', function () {
-    expect(Namecrement::namecrement('file', ['file', 'file (5)', 'file (10)']))
-        ->toBe('file (1)');
-});
-
-it('handles names that partially match but are different', function () {
-    expect(Namecrement::namecrement('file', ['file', 'filex', 'file (1)', 'filex (1)']))
-        ->toBe('file (2)');
+describe('Namecrement - Validation', function () {
+    it('throws if suffix format does not contain %N%', function () {
+        expect(fn() => Namecrement::namecrement('file', ['file'], ' (X)'))
+            ->toThrow(new InvalidArgumentException('suffixFormat must contain "%N%"'));
+    });
 });
