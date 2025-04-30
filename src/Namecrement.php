@@ -2,6 +2,8 @@
 
 namespace HichemTabTech\Namecrement;
 
+use InvalidArgumentException;
+
 class Namecrement
 {
     /**
@@ -10,25 +12,44 @@ class Namecrement
      *
      * @param string $baseName The base name to be used for generating a unique name.
      * @param array $existingNames An array of existing names to check against.
+     * @param string $suffixFormat Suffix format with %N% as a placeholder (default: " (%N%)").
      * @return string The unique name generated based on the base name and existing names.
      */
-    public static function namecrement(string $baseName, array $existingNames): string
+    public static function namecrement(string $baseName, array $existingNames, string $suffixFormat = ' (%N%)'): string
     {
-        $usedIndexes = [];
+        if (!str_contains($suffixFormat, '%N%')) {
+            throw new InvalidArgumentException('suffixFormat must contain "%N%"');
+        }
+
+        // Remove the suffix from the name if it matches the format
+        $escapedFormat = preg_quote($suffixFormat, '/');
+        $regex = '/^(.*)' . str_replace('%N%', '(\d+)', $escapedFormat) . '$/';
+
+        if (preg_match($regex, $baseName, $matches)) {
+            $baseName = $matches[1]; // remove suffix
+        }
+
+        // Build the matcher to compare against existing names
+        $matchRegex = '/^' . preg_quote($baseName, '/') . '(?:' . str_replace('%N%', '(\d+)', $escapedFormat) . ')?$/';
+
+        $used = [];
 
         foreach ($existingNames as $name) {
-            if ($name === $baseName) {
-                $usedIndexes[0] = true;
-            } elseif (preg_match('/^' . preg_quote($baseName, '/') . ' \((\d+)\)$/', $name, $matches)) {
-                $usedIndexes[(int) $matches[1]] = true;
+            if (preg_match($matchRegex, $name, $matches)) {
+                $index = isset($matches[1]) ? (int) $matches[1] : 0;
+                $used[$index] = true;
             }
         }
 
-        $index = 0;
-        while (isset($usedIndexes[$index])) {
-            $index++;
+        if (!isset($used[0])) {
+            return $baseName;
         }
 
-        return $index === 0 ? $baseName : "$baseName ($index)";
+        $i = 1;
+        while (isset($used[$i])) {
+            $i++;
+        }
+
+        return $baseName . str_replace('%N%', (string)$i, $suffixFormat);
     }
 }
