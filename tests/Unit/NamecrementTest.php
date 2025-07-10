@@ -92,3 +92,45 @@ describe('Namecrement - Validation', function () {
             ->toThrow(new InvalidArgumentException('suffixFormat must contain "%N%"'));
     });
 });
+
+describe('namecrement with startingNumber option', function () {
+    it('starts numbering from startingNumber if base name is available', function () {
+        expect(Namecrement::namecrement('file', [], ' (%N%)', 2))
+            ->toBe('file (2)');
+    });
+
+    it('starts numbering from startingNumber even if base name is taken', function () {
+        expect(Namecrement::namecrement('file', ['file'], ' (%N%)', 2))
+            ->toBe('file (2)');
+    });
+
+    it('finds the next available number from startingNumber', function () {
+        expect(Namecrement::namecrement('file', ['file', 'file (2)'], ' (%N%)', 2))
+            ->toBe('file (3)');
+    });
+
+    it('handles startingNumber of 0', function () {
+        expect(Namecrement::namecrement('file', [], ' (%N%)', 0))
+            ->toBe('file (0)');
+    });
+
+    it('handles startingNumber of 0 when base name is taken', function () {
+        expect(Namecrement::namecrement('file', ['file (0)'], ' (%N%)', 0))
+            ->toBe('file (1)');
+    });
+
+    it('ignores startingNumber when proposed name is unique and no starting number is passed', function () {
+        expect(Namecrement::namecrement('file', ['file (1)']))
+            ->toBe('file');
+    });
+
+    it('uses startingNumber when proposed name is unique but a starting number is passed', function () {
+        expect(Namecrement::namecrement('file', ['file (1)'], ' (%N%)', 5))
+            ->toBe('file (5)');
+    });
+
+    it('handles a scenario where startingNumber is occupied', function () {
+        expect(Namecrement::namecrement('file', ['file (5)'], ' (%N%)', 5))
+            ->toBe('file (6)');
+    });
+});
