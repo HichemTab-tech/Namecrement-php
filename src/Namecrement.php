@@ -13,9 +13,15 @@ class Namecrement
      * @param string $baseName The base name to be used for generating a unique name.
      * @param array $existingNames An array of existing names to check against.
      * @param string $suffixFormat Suffix format with %N% as a placeholder (default: " (%N%)").
+     * @param int|null $startingNumber Optional starting number for the increment (default: null).
      * @return string The unique name generated based on the base name and existing names.
      */
-    public static function namecrement(string $baseName, array $existingNames, string $suffixFormat = ' (%N%)'): string
+    public static function namecrement(
+        string $baseName,
+        array $existingNames,
+        string $suffixFormat = ' (%N%)',
+        ?int $startingNumber = null
+    ): string
     {
         if (!str_contains($suffixFormat, '%N%')) {
             throw new InvalidArgumentException('suffixFormat must contain "%N%"');
@@ -41,11 +47,11 @@ class Namecrement
             }
         }
 
-        if (!isset($used[0])) {
+        if (!isset($used[0]) AND $startingNumber === null) {
             return $baseName;
         }
 
-        $i = 1;
+        $i = $startingNumber??1;
         while (isset($used[$i])) {
             $i++;
         }
