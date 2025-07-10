@@ -81,11 +81,12 @@ Namecrement::namecrement('version', ['version', 'version<v1>'], '<v%N%>');
 
 ### `namecrement(string $baseName, array $existingNames): string`
 
-| Parameter       | Type     | Description                           |
-|-----------------|----------|---------------------------------------|
-| `baseName`      | string   | Proposed name to start from           |
-| `existingNames` | string[] | List of already existing names        |
-| `suffixFormat`  | string   | Optional format for suffix (optional) |
+| Parameter        | Type          | Description                                          |
+|------------------|---------------|------------------------------------------------------|
+| `baseName`       | string        | Proposed name to start from                          |
+| `existingNames`  | string[]      | List of already existing names                       |
+| `suffixFormat`   | string        | Optional format for suffix (optional)                |
+| `startingNumber` | `int \| null` | The starting number for incrementing (default: null) |
 
 Returns the next available **unique name**.
 
@@ -104,6 +105,9 @@ Namecrement::namecrement('new', []);
 // ➔ 'new'
 Namecrement::namecrement('file', ['file', 'file (1)', 'file (2)'], ' -%N%-');
 // ➔ 'file -1-'
+
+Namecrement::namecrement('file', [], startingNumber: 5);
+// → 'file (5)'
 ```
 
 ---
