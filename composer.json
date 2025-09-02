@@ -19,8 +19,14 @@
             "email": "hichem.tab2002@gmail.com"
         }
     ],
+    "scripts": {
+        "test": "./vendor/bin/pest"
+    },
+  "require": {
+    "php": "^8.2 || ^8.3 || ^8.4"
+  },
     "require-dev": {
-        "pestphp/pest": "^3.8"
+        "pestphp/pest": "^3.8 || ^4.0"
     },
     "config": {
         "allow-plugins": {
