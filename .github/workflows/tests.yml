@@ -10,6 +10,9 @@ on:
 jobs:
   pest:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        phpVersion: ['8.2', '8.3', '8.4']
 
     steps:
       - name: Checkout code
@@ -18,7 +21,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: ${{ matrix.phpVersion }}
           coverage: none
 
       - name: Install dependencies
